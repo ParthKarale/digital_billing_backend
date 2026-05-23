@@ -5,3 +5,4 @@ psycopg2-binary
 fpdf
 passlib
 bcrypt
+python-dotenv
