@@ -47,6 +47,9 @@ class EmployeeActivateReq(BaseModel):
 class EmployeeLoginReq(BaseModel):
     employeeKey: str
 
+class EmployeeCreateReq(BaseModel):
+    access_key: str
+
 os.makedirs("receipts", exist_ok=True)
 app = FastAPI(title="Digital Billing System API", version="1.0.0")
 
@@ -336,3 +339,11 @@ def employee_login(req: EmployeeLoginReq, db: Session = Depends(database.get_db)
         raise HTTPException(status_code=401, detail="Invalid or inactive access key")
         
     return {"message": "Login successful", "role": "employee", "name": employee.name}
+
+@app.post("/api/employee/create")
+def create_employee_key(req: EmployeeCreateReq, db: Session = Depends(database.get_db)):
+    # Create a blank, inactive employee slot
+    new_emp = models.Employee(access_key=req.access_key, name="Unclaimed", is_active=False)
+    db.add(new_emp)
+    db.commit()
+    return {"message": "Key generated successfully!"}
