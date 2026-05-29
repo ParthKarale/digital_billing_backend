@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, Numeric, DateTime, ForeignKey, Text
+from sqlalchemy import Boolean
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from database import Base
@@ -68,3 +69,12 @@ class Payment(Base):
     payment_method = Column(String(50), nullable=False)
     transaction_reference = Column(String(255))
     payment_date = Column(DateTime, default=datetime.utcnow)
+ # Just in case this isn't imported at the top!
+
+class Employee(Base):
+    __tablename__ = "employees"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, default="Unclaimed")
+    access_key = Column(String, unique=True, index=True)
+    is_active = Column(Boolean, default=False)
