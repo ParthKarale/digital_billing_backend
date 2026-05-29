@@ -19,6 +19,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 models.Base.metadata.create_all(bind=database.engine)
 
 # Smart Auto-Updater
+# Smart Auto-Updater
 with database.engine.begin() as conn:
     try:
         conn.execute(text("ALTER TABLE invoice ADD COLUMN discount_percent NUMERIC(5,2) DEFAULT 0;"))
@@ -27,6 +28,13 @@ with database.engine.begin() as conn:
     except: pass
     try:
         conn.execute(text("ALTER TABLE customer ADD COLUMN address TEXT NOT NULL DEFAULT 'Not Provided';"))
+    except: pass
+    
+    # --- NEW: FIX FOR THE OWNERS TABLE ---
+    try:
+        conn.execute(text("ALTER TABLE owners ADD COLUMN company_name VARCHAR;"))
+        conn.execute(text("ALTER TABLE owners ADD COLUMN company_phone VARCHAR;"))
+        conn.execute(text("ALTER TABLE owners ADD COLUMN company_address VARCHAR;"))
     except: pass
 
 class OwnerSignupReq(BaseModel):
