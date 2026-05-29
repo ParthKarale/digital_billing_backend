@@ -55,11 +55,8 @@ app = FastAPI(title="Digital Billing System API", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware, 
-    allow_origins=[
-        "http://localhost:3000", 
-        "https://digital-billing-frontend.vercel.app"
-    ], 
-    allow_credentials=True, 
+    allow_origins=["*"], # ALLOWS ANY WEBSITE TO CONNECT
+    allow_credentials=False, # MUST BE FALSE WHEN ORIGINS IS "*"
     allow_methods=["*"], 
     allow_headers=["*"],
 )
