@@ -78,3 +78,12 @@ class Employee(Base):
     name = Column(String, default="Unclaimed")
     access_key = Column(String, unique=True, index=True)
     is_active = Column(Boolean, default=False)
+class Owner(Base):
+    __tablename__ = "owners"
+
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String, unique=True, index=True)
+    hashed_password = Column(String)
+    company_name = Column(String)
+    company_phone = Column(String)
+    company_address = Column(String)
