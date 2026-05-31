@@ -19,29 +19,43 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 models.Base.metadata.create_all(bind=database.engine)
 
 # Smart Auto-Updater
-with database.engine.begin() as conn:
-    try:
+# Each command gets its own transaction so one failure doesn't block the others!
+
+try:
+    with database.engine.begin() as conn:
         conn.execute(text("ALTER TABLE invoice ADD COLUMN discount_percent NUMERIC(5,2) DEFAULT 0;"))
+except: pass
+
+try:
+    with database.engine.begin() as conn:
         conn.execute(text("ALTER TABLE invoice ADD COLUMN cgst_percent NUMERIC(5,2) DEFAULT 0;"))
+except: pass
+
+try:
+    with database.engine.begin() as conn:
         conn.execute(text("ALTER TABLE invoice ADD COLUMN sgst_percent NUMERIC(5,2) DEFAULT 0;"))
-    except: pass
-    
-    try:
+except: pass
+
+try:
+    with database.engine.begin() as conn:
         conn.execute(text("ALTER TABLE customer ADD COLUMN address TEXT NOT NULL DEFAULT 'Not Provided';"))
-    except: pass
-    
-    # --- BULLETPROOF OWNER TABLE UPDATER ---
-    try:
+except: pass
+
+# --- OWNER TABLE UPDATES ---
+try:
+    with database.engine.begin() as conn:
         conn.execute(text("ALTER TABLE owners ADD COLUMN company_name VARCHAR;"))
-    except: pass
-    
-    try:
+except: pass
+
+try:
+    with database.engine.begin() as conn:
         conn.execute(text("ALTER TABLE owners ADD COLUMN company_phone VARCHAR;"))
-    except: pass
-    
-    try:
+except: pass
+
+try:
+    with database.engine.begin() as conn:
         conn.execute(text("ALTER TABLE owners ADD COLUMN company_address VARCHAR;"))
-    except: pass
+except: pass
 class OwnerSignupReq(BaseModel):
     email: str
     password: str
